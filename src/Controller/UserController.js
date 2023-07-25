@@ -177,6 +177,15 @@ export const getAddressesUser = async (req, res = response) => {
         [req.uid]
       );
   
+      // Check if addressesdb is null or empty
+      if (!addressesdb || addressesdb.length === 0) {
+        return res.json({
+          resp: true,
+          msg: 'No addresses found for this user',
+          listAddresses: [],
+        });
+      }
+  
       // The addressesdb result is an array of rows from the database
       // You need to convert it to the listAddresses format expected by the frontend
       const listAddresses = addressesdb.map((row) => {
