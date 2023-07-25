@@ -9,26 +9,38 @@ export const loginController = async ( req, res = response ) => {
     try {
 
         const { email, password } = req.body;
-
+        console.log(email,password);
+        // let salt = bcrypt.genSaltSync();
+        // const pass = bcrypt.hashSync( password, salt );
+        // console.log(pass);
         const validatedEmail = await pool.query('SELECT email FROM users WHERE email = ?', [ email ]);
 
         if( validatedEmail.length == 0 ){
             return res.status(400).json({
                 resp: false,
-                msg : 'Wrong Credentials'
+                msg : 'Wrong email Credentials'
             });
         }
 
         const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
 
         const user = userdb[0][0];
-
-        if( !await bcrypt.compareSync( password, user.passwordd )){
-            return res.status(401).json({
-                resp: false,
-                msg : 'Wrong Credentials'
-            }); 
-        }
+        console.log("User Password:", user['passwordd']); 
+        
+        if( !await bcrypt.compareSync( password, user['passwordd'] )){
+                return res.status(401).json({
+                        resp: false,
+                        msg : 'Wrong Credentials'
+                    }); 
+                }
+                // const user = validatedEmail[0];
+        //         console.log(user.passwordd);
+        // if (password !== user.passwordd) {
+        //     return res.status(401).json({
+        //       resp: false,
+        //       msg: 'Wrong password Credentials',
+        //     });
+        //   }
 
         let token = await generateJsonWebToken( user.uid );
 

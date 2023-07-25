@@ -121,12 +121,18 @@ export const changeImageProfile = async (req, res = response) => {
     try {
 
         const imagePath = req.file.filename;
+        console.log('req.file:', req.file);
+        console.log('imagePath:', imagePath);
+        console.log('Request Id:', req.uid);
 
-        const imagedb = await pool.query('SELECT image FROM person WHERE uid = ?', [ req.uid ]);
+        const imagedb = pool.query('SELECT image FROM person WHERE uid = ?', [req.uid]);
         
-        await fs.unlink( path.resolve('src/Uploads/Profile/'+imagedb[0].image));
+        if (imagedb.length > 0) {
+            // If the user has an existing profile picture, delete the old image file
+            await fs.unlink(path.resolve('src/Uploads/Profile/' + imagedb[0].image));
+          }
 
-        await pool.query('UPDATE person SET image = ? WHERE uid = ?', [ imagePath, req.uid ]);
+        pool.query('UPDATE person SET image = ? WHERE uid = ?', [imagePath, req.uid]);
 
         res.json({
             resp: true,
@@ -143,26 +149,59 @@ export const changeImageProfile = async (req, res = response) => {
 }
 
 
-export const getAddressesUser = async (req, res = response ) => {
+// export const getAddressesUser = async (req, res = response ) => {
 
-    try {
+//     try {
 
-        const addressesdb = await pool.query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
+//         const addressesdb = pool.query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
 
-        res.json({
-            resp: true,
-            msg : 'List the Addresses',
-            listAddresses : addressesdb
-        });
+//         res.json({
+//             resp: true,
+//             msg : 'List the Addresses',
+//             listAddresses : addressesdb
+//         });
         
-    } catch (e) {
-        return res.status(500).json({
-            resp: false,
-            msg : e
-        });
-    }
+//     } catch (e) {
+//         return res.status(500).json({
+//             resp: false,
+//             msg : e
+//         });
+//     }
 
-}
+// }
+
+export const getAddressesUser = async (req, res = response) => {
+    try {
+      const addressesdb = await pool.query(
+        'SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?',
+        [req.uid]
+      );
+  
+      // The addressesdb result is an array of rows from the database
+      // You need to convert it to the listAddresses format expected by the frontend
+      const listAddresses = addressesdb.map((row) => {
+        return {
+          id: row.id,
+          street: row.street,
+          reference: row.reference,
+          Latitude: row.Latitude,
+          Longitude: row.Longitude,
+        };
+      });
+  
+      res.json({
+        resp: true,
+        msg: 'List the Addresses',
+        listAddresses: listAddresses, // Use the converted listAddresses here
+      });
+    } catch (e) {
+      return res.status(500).json({
+        resp: false,
+        msg: e,
+      });
+    }
+  };
+
 
 
 export const deleteStreetAddress = async (req, res = response ) => {
@@ -212,7 +251,7 @@ export const getAddressOne = async (req, res = response) => {
 
     try {
 
-        const addressdb = await pool.query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [ req.uid ]);
+        const addressdb = pool.query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [req.uid]);
         
         res.json({
             resp: true,
