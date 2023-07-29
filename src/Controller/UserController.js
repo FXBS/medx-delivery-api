@@ -149,67 +149,67 @@ export const changeImageProfile = async (req, res = response) => {
 }
 
 
-// export const getAddressesUser = async (req, res = response ) => {
+export const getAddressesUser = async (req, res = response ) => {
 
-//     try {
-
-//         const addressesdb = pool.query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
-
-//         res.json({
-//             resp: true,
-//             msg : 'List the Addresses',
-//             listAddresses : addressesdb
-//         });
-        
-//     } catch (e) {
-//         return res.status(500).json({
-//             resp: false,
-//             msg : e
-//         });
-//     }
-
-// }
-
-export const getAddressesUser = async (req, res = response) => {
     try {
-      const addressesdb = await pool.query(
-        'SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?',
-        [req.uid]
-      );
-  
-      // Check if addressesdb is null or empty
-      if (!addressesdb || addressesdb.length === 0) {
-        return res.json({
-          resp: true,
-          msg: 'No addresses found for this user',
-          listAddresses: [],
+
+        const addressesdb = pool.query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
+
+        res.json({
+            resp: true,
+            msg : 'List the Addresses',
+            listAddresses : addressesdb
         });
-      }
-  
-      // The addressesdb result is an array of rows from the database
-      // You need to convert it to the listAddresses format expected by the frontend
-      const listAddresses = addressesdb.map((row) => {
-        return {
-          id: row.id,
-          street: row.street,
-          reference: row.reference,
-          Latitude: row.Latitude,
-          Longitude: row.Longitude,
-        };
-      });
-  
-      res.json({
-        resp: true,
-        msg: 'List the Addresses',
-        listAddresses: listAddresses, // Use the converted listAddresses here
-      });
+        
     } catch (e) {
-      return res.status(500).json({
-        resp: false,
-        msg: e,
-      });
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
     }
-  };
+
+}
+
+// export const getAddressesUser = async (req, res = response) => {
+//     try {
+//       const addressesdb = await pool.query(
+//         'SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?',
+//         [req.uid]
+//       );
+  
+//       // Check if addressesdb is null or empty
+//       if (!addressesdb || addressesdb.length === 0) {
+//         return res.json({
+//           resp: true,
+//           msg: 'No addresses found for this user',
+//           listAddresses: [],
+//         });
+//       }
+  
+//       // The addressesdb result is an array of rows from the database
+//       // You need to convert it to the listAddresses format expected by the frontend
+//       const listAddresses = addressesdb.map((row) => {
+//         return {
+//           id: row.id,
+//           street: row.street,
+//           reference: row.reference,
+//           Latitude: row.Latitude,
+//           Longitude: row.Longitude,
+//         };
+//       });
+  
+//       res.json({
+//         resp: true,
+//         msg: 'List the Addresses',
+//         listAddresses: listAddresses, // Use the converted listAddresses here
+//       });
+//     } catch (e) {
+//       return res.status(500).json({
+//         resp: false,
+//         msg: e,
+//       });
+//     }
+//   };
 
 
 
