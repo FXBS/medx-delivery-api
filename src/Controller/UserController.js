@@ -153,7 +153,7 @@ export const getAddressesUser = async (req, res = response ) => {
 
     try {
 
-        const addressesdb = pool.query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
+        const addressesdb = await pool.query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
 
         res.json({
             resp: true,
