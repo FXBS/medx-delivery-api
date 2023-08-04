@@ -11,7 +11,7 @@ import routerUser from './Router/User.routes';
 import routerProduct from './Router/Product.routes';
 import routerCategory from './Router/Category.routes';
 import routerOrder from './Router/Order.routes';
-import pincodeRoutes from './Router/PincodeRoutes';
+import pincodeRoutes from './Router/Pincode.routes';
 
 
 config();
