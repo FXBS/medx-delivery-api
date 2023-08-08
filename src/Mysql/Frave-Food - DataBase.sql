@@ -1,6 +1,6 @@
-CREATE DATABASE frave_food;
+-- CREATE DATABASE medx_delivery;
 
-USE frave_food;
+USE u930286518_medx_delivery;
 
 CREATE TABLE roles
 (

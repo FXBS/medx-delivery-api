@@ -14,7 +14,7 @@ export const verifyToken = ( req, res, next ) => {
                 msg : 'There is not Token in the request'
             });
         }
-
+        console.log('Received Token:', token);
         const { uidPerson } = jwt.verify( token, process.env.APP_KEY_JWT );
 
         req.uid = uidPerson;

@@ -11,7 +11,7 @@ import routerUser from './Router/User.routes';
 import routerProduct from './Router/Product.routes';
 import routerCategory from './Router/Category.routes';
 import routerOrder from './Router/Order.routes';
-import pincodeRoutes from './Router/Pincode.routes';
+import routerPincode from './Router/Pincode.routes';
 
 
 config();
@@ -32,7 +32,7 @@ app.use('/api', routerUser);
 app.use('/api', routerProduct);
 app.use('/api', routerCategory);
 app.use('/api', routerOrder);
-app.use('/api', pincodeRoutes);
+app.use('/api', routerPincode);
 
 app.use( express.static( path.join( __dirname, 'Uploads/Profile' )));
 app.use( express.static( path.join( __dirname, 'Uploads/Products' )));

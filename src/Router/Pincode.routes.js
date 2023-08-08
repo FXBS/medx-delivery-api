@@ -3,7 +3,7 @@ import * as pincode from '../Controller/PincodeController';
 import { verifyToken } from '../Middleware/ValidateToken';
 
 const router = Router();
-
+console.log(verifyToken);
 // Route to get all states
 router.get('/get-states', verifyToken, pincode.getAllStates);
 
