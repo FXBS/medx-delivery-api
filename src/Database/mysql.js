@@ -1,14 +1,27 @@
 import mysql from 'mysql';
 import { promisify } from 'util';
 
+// const pool = mysql.createPool({
+//     host: 'localhost',
+//     user: 'root',
+//     password: "",
+//     database: 'frave_food'  
+   
+// });
+
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: "",
-    database: 'frave_food'  
-    // password: "Medx2023",
-    // database: 'u930286518_medx_delivery'
+    host: 'medxlogisticserver2.mysql.database.azure.com',
+    user: 'azurelogistic',
+    password: "medx@2023",
+    database: 'medx_delivery',
+    SslCa: 'DigiCertGlobalRootCA.crt.pem',
+    ssl: {
+        rejectUnauthorized: false, // Set this to true to perform SSL certificate validation
+    },
+    // MYSQLI_CLIENT_SSL  
+   
 });
+
 
 pool.getConnection((err, connection) => {
 

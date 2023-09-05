@@ -1,6 +1,8 @@
 -- CREATE DATABASE medx_delivery;
 
-USE u930286518_medx_delivery;
+-- USE u930286518_medx_delivery;
+
+USE medx_delivery;
 
 CREATE TABLE roles
 (

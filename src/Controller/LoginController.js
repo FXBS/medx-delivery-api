@@ -15,16 +15,34 @@ export const loginController = async ( req, res = response ) => {
         // console.log(pass);
         const validatedEmail = await pool.query('SELECT email FROM users WHERE email = ?', [ email ]);
 
+        console.log("email validation ",validatedEmail);
+
+        console.log("email validation length ",validatedEmail.length);
+
         if( validatedEmail.length == 0 ){
             return res.status(400).json({
                 resp: false,
                 msg : 'Wrong email Credentials'
             });
+            
         }
 
-        const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
+        //const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
+        
+        const emailParameter = "_utf8mb4'" + email + "' COLLATE utf8mb4_general_ci";
+        
+        const userdb = await pool.query(`CALL SP_LOGIN(${emailParameter});`);
+
+
+    //   const userdb = await pool.query(`SELECT p.uid, p.firstName, p.lastName, p.image, u.email, u.passwordd, u.rol_id, u.notification_token FROM person p
+    //   INNER JOIN users u ON p.uid = u.persona_id
+    //   WHERE u.email = ? AND p.state = TRUE;`, [email]);
+
+    
 
         const user = userdb[0][0];
+        console.log("User DB details:", userdb); 
+        console.log("User details:", user); 
         console.log("User Password:", user['passwordd']); 
         
         if( !await bcrypt.compareSync( password, user['passwordd'] )){
@@ -46,7 +64,7 @@ export const loginController = async ( req, res = response ) => {
 
         res.json({
             resp: true,
-            msg : 'Welcome to Frave Restaurant',
+            msg : 'Welcome to Med-X Delivery',
             user: {
                 uid: user.uid,
                 firstName: user.firstName,
@@ -83,7 +101,7 @@ export const renewTokenLogin = async ( req, res = response ) => {
         
         res.json({
             resp: true,
-            msg : 'Welcome to Frave Restaurant',
+            msg : 'Welcome to Med-X Delivery',
             user: {
                 uid: user.uid,
                 firstName: user.firstName,

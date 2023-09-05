@@ -3,7 +3,8 @@
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------Storage Procedure----------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
-USE u930286518_medx_delivery;
+-- USE u930286518_medx_delivery;
+USE medx_delivery;
 
 DELIMITER //
 CREATE PROCEDURE SP_REGISTER(IN firstName VARCHAR(50), IN lastName VARCHAR(50), IN phone VARCHAR(11), IN image VARCHAR(250), IN email VARCHAR(100), IN pass VARCHAR(100), IN rol INT, IN nToken VARCHAR(255))
@@ -12,6 +13,51 @@ BEGIN
 	
 	INSERT INTO users (users, email, passwordd, persona_id, rol_id, notification_token) VALUE (firstName, email, pass, LAST_INSERT_ID(), rol, nToken);
 END//
+
+/*---------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+DELIMITER //
+CREATE PROCEDURE SP_REGISTER_PARTNER(
+    IN firstName VARCHAR(50),
+    IN lastName VARCHAR(50),
+    IN phone VARCHAR(11),
+    IN image VARCHAR(250),
+    IN email VARCHAR(100),
+    IN selectedState VARCHAR(255),
+    IN selectedDistrict VARCHAR(255),
+    IN selectedTaluk VARCHAR(255),
+    IN selectedPincodes TEXT,
+    IN pass VARCHAR(100),
+    IN rol INT,
+    IN nToken VARCHAR(255)
+)
+BEGIN
+    DECLARE personaId INT;
+
+	-- Debug: Print the value of selectedPincodes
+	SELECT 'Received Pincodes: ' + selectedPincodes;
+    
+    -- Insert into Person table
+    INSERT INTO Person (firstName, lastName, phone, image) VALUES (firstName, lastName, phone, image);
+    SET personaId = LAST_INSERT_ID(); -- Get the last inserted ID
+    
+    -- Insert into users table
+    INSERT INTO users (users, email, passwordd, persona_id, rol_id, notification_token) VALUES (firstName, email, pass, personaId, rol, nToken);
+    
+    -- Get the last inserted user ID
+    DECLARE userId INT;
+    SET userId = LAST_INSERT_ID();
+    
+    -- Insert into partner_details table
+    INSERT INTO partner_details (user_id, state, district, taluk, pincodes) VALUES (userId, selectedState, selectedDistrict, selectedTaluk, selectedPincodes);
+    
+END //
+
+
+
+
+
 
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 

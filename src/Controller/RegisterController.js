@@ -78,3 +78,42 @@ export const registerDelivery = async (req, res = response) => {
 
 }
 
+export const registerDeliveryPartner = async (req, res = response) => {
+
+    try {
+
+        const { firstname, lastname, phone, email, selectedState, selectedDistrict, selectedTaluk,  selectedPincodes, password, notification_token } = req.body;
+        const imagePath = req.file.filename;
+
+        console.log('Selected Pincodes:', selectedPincodes);
+        console.log('Selected state from database:', selectedState);
+
+        const validatedEmail = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
+
+        if( validatedEmail.length  > 0 ){
+            return res.status(401).json({
+                resp: false,
+                msg : 'Email already exists'
+            });
+        }
+
+        let salt = bcrypt.genSaltSync();
+        const pass = bcrypt.hashSync( password, salt );
+
+        await pool.query(`CALL SP_REGISTER_PARTNER(?,?,?,?,?,?,?,?,?,?,?,?);`, [firstname, lastname, phone, imagePath, email,selectedState, selectedDistrict, selectedTaluk,  selectedPincodes, pass, 3, notification_token]);
+
+        res.json({
+            resp: true,
+            msg : 'Devlivery successfully registered',
+        });
+
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+
+}
