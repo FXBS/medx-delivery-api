@@ -2,19 +2,25 @@ import express from 'express';
 import path from 'path';
 import { config } from 'dotenv';
 
+import { fileURLToPath } from 'url'; 
+
 import { createServer } from "http";
 import Server from "socket.io";
-import { socketOrderDelivery } from './Sockets/SocketOrderDelivery';
+import { socketOrderDelivery } from './Sockets/SocketOrderDelivery.js';
 
-import routeAuth from './Router/Auth.routes';
-import routerUser from './Router/User.routes';
-import routerProduct from './Router/Product.routes';
-import routerCategory from './Router/Category.routes';
-import routerOrder from './Router/Order.routes';
-import routerPincode from './Router/Pincode.routes';
+import routeAuth from './Router/Auth.routes.js';
+import routerUser from './Router/User.routes.js';
+import routerProduct from './Router/Product.routes.js';
+import routerCategory from './Router/Category.routes.js';
+import routerOrder from './Router/Order.routes.js';
+import routerPincode from './Router/Pincode.routes.js';
 
 
 config();
+
+// Get the directory name using 'fileURLToPath' function
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -37,10 +43,10 @@ app.use('/api', routerPincode);
 app.use( express.static( path.join( __dirname, 'Uploads/Profile' )));
 app.use( express.static( path.join( __dirname, 'Uploads/Products' )));
 
-app.use( express.static( "./dist"));
-app.get("*",(req,res)=>{
-    res.sendFile(path.resolve(__dirname,"dist","index.js"))
-})
+// app.use( express.static( "./dist"));
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.resolve(__dirname,"dist","index.js"))
+// })
 
 
 export default httpServer;

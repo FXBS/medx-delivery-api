@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import * as category from '../Controller/CategoryController';
-import { getAllDelivery } from '../Controller/DeliveryController';
-import { verifyToken } from '../Middleware/ValidateToken';
+import * as category from '../Controller/CategoryController.js';
+import { getAllDelivery } from '../Controller/DeliveryController.js';
+import { verifyToken } from '../Middleware/ValidateToken.js';
 
 const router = Router();
 

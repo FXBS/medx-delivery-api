@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { verifyToken } from '../Middleware/ValidateToken';
-import * as register from '../Controller/RegisterController';
-import * as user from '../Controller/UserController';
-import { upLoadsProfile } from '../Lib/Multer';
+import { verifyToken } from '../Middleware/ValidateToken.js';
+import * as register from '../Controller/RegisterController.js';
+import * as user from '../Controller/UserController.js';
+import { upLoadsProfile } from '../Lib/Multer.js';
 
 const router = Router();
 

@@ -14,7 +14,7 @@ const pool = mysql.createPool({
     user: 'azurelogistic',
     password: "medx@2023",
     database: 'medx_delivery',
-    SslCa: 'DigiCertGlobalRootCA.crt.pem',
+    // SslCa: 'DigiCertGlobalRootCA.crt.pem',
     ssl: {
         rejectUnauthorized: false, // Set this to true to perform SSL certificate validation
     },

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as pincode from '../Controller/PincodeController';
-import { verifyToken } from '../Middleware/ValidateToken';
+import * as pincode from '../Controller/PincodeController.js';
+import { verifyToken } from '../Middleware/ValidateToken.js';
 
 const router = Router();
 console.log(verifyToken);
