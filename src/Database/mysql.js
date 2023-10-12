@@ -15,8 +15,8 @@ const pool = mysql.createPool({
     password: "medx@2023",
     database: 'medx_delivery',
     port: 3306, // Your Azure MySQL port (default is 3306)
+    SslCa: 'DigiCertGlobalRootCA.crt.pem',
     ssl: {
-         ca: fs.readFileSync("ca-certDigiCertGlobalRootCA.crt.pem"),
         rejectUnauthorized: false, // Set this to true to perform SSL certificate validation
     },
     // MYSQLI_CLIENT_SSL  
