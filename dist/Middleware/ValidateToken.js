@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.verifyToken = void 0;
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-var verifyToken = exports.verifyToken = function verifyToken(req, res, next) {
+var verifyToken = function verifyToken(req, res, next) {
   try {
     var token = req.header('xx-token');
     if (!token) {
@@ -36,3 +36,4 @@ var verifyToken = exports.verifyToken = function verifyToken(req, res, next) {
     });
   }
 };
+exports.verifyToken = verifyToken;

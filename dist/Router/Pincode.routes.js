@@ -25,4 +25,5 @@ router.get('/get-taluks', _ValidateToken.verifyToken, pincode.getTaluksByDistric
 router.get('/get-pincodes', _ValidateToken.verifyToken, pincode.getPincodesByTaluk);
 
 // router.get('/get-pincodes', verifyToken, pincode.getPincodesByStateDistrictTaluk);
-var _default = exports["default"] = router;
+var _default = router;
+exports["default"] = _default;

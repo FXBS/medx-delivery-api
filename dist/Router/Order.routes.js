@@ -20,4 +20,5 @@ router.get('/get-all-orders-by-delivery/:statusOrder', _ValidateToken.verifyToke
 router.put('/update-status-order-on-way/:idOrder', _ValidateToken.verifyToken, orders.updateStatusToOntheWay);
 router.put('/update-status-order-delivered/:idOrder', _ValidateToken.verifyToken, orders.updateStatusToDelivered);
 router.get('/get-list-orders-for-client', _ValidateToken.verifyToken, client.getListOrdersForClient);
-var _default = exports["default"] = router;
+var _default = router;
+exports["default"] = _default;

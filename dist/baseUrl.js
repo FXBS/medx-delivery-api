@@ -5,4 +5,5 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var baseUrl = "https://medxdeliveryapi.azurewebsites.net";
-var _default = exports["default"] = baseUrl;
+var _default = baseUrl;
+exports["default"] = _default;

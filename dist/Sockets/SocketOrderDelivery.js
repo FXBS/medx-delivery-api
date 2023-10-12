@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.socketOrderDelivery = void 0;
-var socketOrderDelivery = exports.socketOrderDelivery = function socketOrderDelivery(io) {
+var socketOrderDelivery = function socketOrderDelivery(io) {
   var nameSpaceOrders = io.of('/orders-delivery-socket');
   nameSpaceOrders.on('connection', function (socket) {
     console.log('USER CONECTED');
@@ -21,3 +21,4 @@ var socketOrderDelivery = exports.socketOrderDelivery = function socketOrderDeli
     });
   });
 };
+exports.socketOrderDelivery = socketOrderDelivery;

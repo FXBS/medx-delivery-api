@@ -39,4 +39,5 @@ pool.getConnection(function (err, connection) {
   return;
 });
 pool.query = (0, _util.promisify)(pool.query);
-var _default = exports["default"] = pool;
+var _default = pool;
+exports["default"] = _default;

@@ -20,4 +20,5 @@ router.get('/search-product-for-category/:idCategory', _ValidateToken.verifyToke
 router.get('/list-porducts-admin', _ValidateToken.verifyToken, product.listProductsAdmin);
 router.put('/update-status-product', _ValidateToken.verifyToken, product.updateStatusProduct);
 router["delete"]('/delete-product/:idProduct', _ValidateToken.verifyToken, product.deleteProduct);
-var _default = exports["default"] = router;
+var _default = router;
+exports["default"] = _default;

@@ -15,9 +15,10 @@ var storageProfile = _multer["default"].diskStorage({
     cb(null, file.fieldname + '-' + Date.now() + _path["default"].extname(file.originalname));
   }
 });
-var upLoadsProfile = exports.upLoadsProfile = (0, _multer["default"])({
+var upLoadsProfile = (0, _multer["default"])({
   storage: storageProfile
 });
+exports.upLoadsProfile = upLoadsProfile;
 var storageProducts = _multer["default"].diskStorage({
   destination: function destination(req, res, cb) {
     cb(null, 'src/Uploads/Products');
@@ -26,6 +27,7 @@ var storageProducts = _multer["default"].diskStorage({
     cb(null, file.fieldname + '-' + Date.now() + _path["default"].extname(file.originalname));
   }
 });
-var upLoadsProducts = exports.upLoadsProducts = (0, _multer["default"])({
+var upLoadsProducts = (0, _multer["default"])({
   storage: storageProducts
 });
+exports.upLoadsProducts = upLoadsProducts;

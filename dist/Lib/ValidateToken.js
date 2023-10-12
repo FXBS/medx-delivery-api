@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-var _default = exports["default"] = ValidatedToken = function ValidatedToken(req, res, next) {
+var _default = ValidatedToken = function ValidatedToken(req, res, next) {
   var token = req.header('xx-token');
   if (!token) {
     return res.status(401).json({
@@ -26,3 +26,4 @@ var _default = exports["default"] = ValidatedToken = function ValidatedToken(req
     });
   }
 };
+exports["default"] = _default;

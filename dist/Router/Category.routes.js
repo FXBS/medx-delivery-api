@@ -15,4 +15,5 @@ var router = (0, _express.Router)();
 router.post('/add-categories', _ValidateToken.verifyToken, category.addCategories);
 router.get('/get-all-categories', _ValidateToken.verifyToken, category.getAllCategories);
 router.get('/get-all-delivery', _ValidateToken.verifyToken, _DeliveryController.getAllDelivery);
-var _default = exports["default"] = router;
+var _default = router;
+exports["default"] = _default;

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.generateJsonWebToken = void 0;
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-var generateJsonWebToken = exports.generateJsonWebToken = function generateJsonWebToken(uidPerson) {
+var generateJsonWebToken = function generateJsonWebToken(uidPerson) {
   return new Promise(function (resolve, reject) {
     var payload = {
       uidPerson: uidPerson
@@ -18,3 +18,4 @@ var generateJsonWebToken = exports.generateJsonWebToken = function generateJsonW
     });
   });
 };
+exports.generateJsonWebToken = generateJsonWebToken;

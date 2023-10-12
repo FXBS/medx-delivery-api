@@ -28,4 +28,5 @@ router.get('/get-address', _ValidateToken.verifyToken, user.getAddressOne);
 router.put('/update-notification-token', _ValidateToken.verifyToken, user.updateNotificationToken);
 router.get('/get-admins-notification-token', _ValidateToken.verifyToken, user.getAdminNotificationToken);
 router.put('/update-delivery-to-client/:idPerson', _ValidateToken.verifyToken, user.updateDeliveryToClient);
-var _default = exports["default"] = router;
+var _default = router;
+exports["default"] = _default;

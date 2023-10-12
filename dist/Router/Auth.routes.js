@@ -13,4 +13,5 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var router = (0, _express.Router)();
 router.post('/login-email-id', login.loginController);
 router.get('/renew-token-login', _ValidateToken.verifyToken, login.renewTokenLogin);
-var _default = exports["default"] = router;
+var _default = router;
+exports["default"] = _default;
