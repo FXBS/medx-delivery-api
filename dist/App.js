@@ -4,36 +4,28 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _express = _interopRequireDefault(require("express"));
-
 var _path = _interopRequireDefault(require("path"));
-
 var _dotenv = require("dotenv");
-
+var _url = require("url");
 var _http = require("http");
-
 var _socket = _interopRequireDefault(require("socket.io"));
-
-var _SocketOrderDelivery = require("./Sockets/SocketOrderDelivery");
-
-var _Auth = _interopRequireDefault(require("./Router/Auth.routes"));
-
-var _User = _interopRequireDefault(require("./Router/User.routes"));
-
-var _Product = _interopRequireDefault(require("./Router/Product.routes"));
-
-var _Category = _interopRequireDefault(require("./Router/Category.routes"));
-
-var _Order = _interopRequireDefault(require("./Router/Order.routes"));
-
-var _Pincode = _interopRequireDefault(require("./Router/Pincode.routes"));
-
+var _SocketOrderDelivery = require("./Sockets/SocketOrderDelivery.js");
+var _AuthRoutes = _interopRequireDefault(require("./Router/Auth.routes.js"));
+var _UserRoutes = _interopRequireDefault(require("./Router/User.routes.js"));
+var _ProductRoutes = _interopRequireDefault(require("./Router/Product.routes.js"));
+var _CategoryRoutes = _interopRequireDefault(require("./Router/Category.routes.js"));
+var _OrderRoutes = _interopRequireDefault(require("./Router/Order.routes.js"));
+var _PincodeRoutes = _interopRequireDefault(require("./Router/Pincode.routes.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
 (0, _dotenv.config)();
-var app = (0, _express["default"])(); // CONFIG SOCKET 
 
+// Get the directory name using 'fileURLToPath' function
+var _filename = (0, _url.fileURLToPath)(import.meta.url);
+var _dirname = _path["default"].dirname(_filename);
+var app = (0, _express["default"])();
+
+// CONFIG SOCKET 
 var httpServer = (0, _http.createServer)(app);
 var io = new _socket["default"](httpServer);
 (0, _SocketOrderDelivery.socketOrderDelivery)(io);
@@ -41,17 +33,17 @@ app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
   extended: false
 }));
-app.use('/api', _Auth["default"]);
-app.use('/api', _User["default"]);
-app.use('/api', _Product["default"]);
-app.use('/api', _Category["default"]);
-app.use('/api', _Order["default"]);
-app.use('/api', _Pincode["default"]);
-app.use(_express["default"]["static"](_path["default"].join(__dirname, 'Uploads/Profile')));
-app.use(_express["default"]["static"](_path["default"].join(__dirname, 'Uploads/Products')));
-app.use(_express["default"]["static"]("./dist"));
+app.use('/api', _AuthRoutes["default"]);
+app.use('/api', _UserRoutes["default"]);
+app.use('/api', _ProductRoutes["default"]);
+app.use('/api', _CategoryRoutes["default"]);
+app.use('/api', _OrderRoutes["default"]);
+app.use('/api', _PincodeRoutes["default"]);
+app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Profile')));
+app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Products')));
+
+// app.use( express.static( "./dist"));
 app.get("*", function (req, res) {
-  res.sendFile(_path["default"].resolve(__dirname, "dist", "index.js"));
+  res.sendFile(_path["default"].resolve(_dirname, "dist", "index.js"));
 });
-var _default = httpServer;
-exports["default"] = _default;
+var _default = exports["default"] = httpServer;

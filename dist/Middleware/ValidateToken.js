@@ -4,27 +4,20 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.verifyToken = void 0;
-
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var verifyToken = function verifyToken(req, res, next) {
+var verifyToken = exports.verifyToken = function verifyToken(req, res, next) {
   try {
     var token = req.header('xx-token');
-
     if (!token) {
       return res.status(401).json({
         resp: false,
         msg: 'There is not Token in the request'
       });
     }
-
     console.log('Received Token:', token);
-
     var _jwt$verify = _jsonwebtoken["default"].verify(token, process.env.APP_KEY_JWT),
-        uidPerson = _jwt$verify.uidPerson;
-
+      uidPerson = _jwt$verify.uidPerson;
     req.uid = uidPerson;
     next();
   } catch (e) {
@@ -43,5 +36,3 @@ var verifyToken = function verifyToken(req, res, next) {
     });
   }
 };
-
-exports.verifyToken = verifyToken;

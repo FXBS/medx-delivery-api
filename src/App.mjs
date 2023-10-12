@@ -44,9 +44,9 @@ app.use( express.static( path.join( __dirname, 'Uploads/Profile' )));
 app.use( express.static( path.join( __dirname, 'Uploads/Products' )));
 
 // app.use( express.static( "./dist"));
-app.get("*",(req,res)=>{
-    res.sendFile(path.resolve(__dirname,"dist","index.js"))
-})
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.resolve(__dirname,"dist","index.js"))
+// })
 
 
 export default httpServer;
