@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 import { fileURLToPath } from 'url'; 
 
 import { createServer } from "http";
-import Server from "socket.io";
+import {Server} from "socket.io";
 import { socketOrderDelivery } from './Sockets/SocketOrderDelivery.js';
 
 import routeAuth from './Router/Auth.routes.js';
