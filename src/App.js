@@ -14,6 +14,7 @@ import routerProduct from './Router/Product.routes.js';
 import routerCategory from './Router/Category.routes.js';
 import routerOrder from './Router/Order.routes.js';
 import routerPincode from './Router/Pincode.routes.js';
+import routerPartner from './Router/Partner.routes.js';
 
 
 config();
@@ -39,6 +40,7 @@ app.use('/api', routerProduct);
 app.use('/api', routerCategory);
 app.use('/api', routerOrder);
 app.use('/api', routerPincode);
+app.use('/api', routerPartner);
 
 app.use( express.static( path.join( __dirname, 'Uploads/Profile' )));
 app.use( express.static( path.join( __dirname, 'Uploads/Products' )));

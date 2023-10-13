@@ -17,6 +17,7 @@ var _ProductRoutes = _interopRequireDefault(require("./Router/Product.routes.js"
 var _CategoryRoutes = _interopRequireDefault(require("./Router/Category.routes.js"));
 var _OrderRoutes = _interopRequireDefault(require("./Router/Order.routes.js"));
 var _PincodeRoutes = _interopRequireDefault(require("./Router/Pincode.routes.js"));
+var _PartnerRoutes = _interopRequireDefault(require("./Router/Partner.routes.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 (0, _dotenv.config)();
 
@@ -39,6 +40,7 @@ app.use('/api', _ProductRoutes["default"]);
 app.use('/api', _CategoryRoutes["default"]);
 app.use('/api', _OrderRoutes["default"]);
 app.use('/api', _PincodeRoutes["default"]);
+app.use('/api', _PartnerRoutes["default"]);
 app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Profile')));
 app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Products')));
 
