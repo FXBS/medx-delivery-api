@@ -43,10 +43,10 @@ app.use('/api', routerPincode);
 app.use( express.static( path.join( __dirname, 'Uploads/Profile' )));
 app.use( express.static( path.join( __dirname, 'Uploads/Products' )));
 
-app.use(express.static(path.join( 'src')));
-app.get("*",(req,res)=>{
-    res.sendFile(path.resolve("src","Index.js"))
-})
+// app.use(express.static(path.join( 'dist')));
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.resolve("dist","Index.js"))
+// })
 
 
 export default httpServer;
