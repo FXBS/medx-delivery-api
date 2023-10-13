@@ -9,7 +9,7 @@ var _path = _interopRequireDefault(require("path"));
 var _dotenv = require("dotenv");
 var _url = require("url");
 var _http = require("http");
-var _socket = _interopRequireDefault(require("socket.io"));
+var _socket = require("socket.io");
 var _SocketOrderDelivery = require("./Sockets/SocketOrderDelivery.js");
 var _AuthRoutes = _interopRequireDefault(require("./Router/Auth.routes.js"));
 var _UserRoutes = _interopRequireDefault(require("./Router/User.routes.js"));
@@ -27,7 +27,7 @@ var app = (0, _express["default"])();
 
 // CONFIG SOCKET 
 var httpServer = (0, _http.createServer)(app);
-var io = new _socket["default"](httpServer);
+var io = new _socket.Server(httpServer);
 (0, _SocketOrderDelivery.socketOrderDelivery)(io);
 app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
@@ -43,7 +43,7 @@ app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/P
 app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Products')));
 app.use(_express["default"]["static"](_path["default"].join(_dirname, 'dist')));
 app.get("*", function (req, res) {
-  res.sendFile(_path["default"].resolve(_dirname, "dist", "index.js"));
+  res.sendFile(_path["default"].resolve(_dirname, "dist", "Index.js"));
 });
 var _default = httpServer;
 exports["default"] = _default;
