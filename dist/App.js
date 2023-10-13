@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var _express = require("express");
+var _express = _interopRequireDefault(require("express"));
 var _path = _interopRequireDefault(require("path"));
 var _dotenv = require("dotenv");
 var _url = require("url");
@@ -23,14 +23,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 // Get the directory name using 'fileURLToPath' function
 var _filename = (0, _url.fileURLToPath)(import.meta.url);
 var _dirname = _path["default"].dirname(_filename);
-var app = (0, _express.express)();
+var app = (0, _express["default"])();
 
 // CONFIG SOCKET 
 var httpServer = (0, _http.createServer)(app);
 var io = new _socket.Server(httpServer);
 (0, _SocketOrderDelivery.socketOrderDelivery)(io);
-app.use(_express.express.json());
-app.use(_express.express.urlencoded({
+app.use(_express["default"].json());
+app.use(_express["default"].urlencoded({
   extended: false
 }));
 app.use('/api', _AuthRoutes["default"]);
@@ -39,11 +39,11 @@ app.use('/api', _ProductRoutes["default"]);
 app.use('/api', _CategoryRoutes["default"]);
 app.use('/api', _OrderRoutes["default"]);
 app.use('/api', _PincodeRoutes["default"]);
-app.use(_express.express["static"](_path["default"].join(_dirname, 'Uploads/Profile')));
-app.use(_express.express["static"](_path["default"].join(_dirname, 'Uploads/Products')));
-app.use(_express.express["static"](_path["default"].join('dist')));
+app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Profile')));
+app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Products')));
+app.use(_express["default"]["static"](_path["default"].join(_dirname, 'dist')));
 app.get("*", function (req, res) {
-  res.sendFile(_path["default"].resolve("dist", "Index.js"));
+  res.sendFile(_path["default"].resolve(_dirname, "dist", "Index.js"));
 });
 var _default = httpServer;
 exports["default"] = _default;
