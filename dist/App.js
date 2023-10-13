@@ -41,9 +41,10 @@ app.use('/api', _OrderRoutes["default"]);
 app.use('/api', _PincodeRoutes["default"]);
 app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Profile')));
 app.use(_express["default"]["static"](_path["default"].join(_dirname, 'Uploads/Products')));
-app.use(_express["default"]["static"](_path["default"].join('src')));
-app.get("*", function (req, res) {
-  res.sendFile(_path["default"].resolve("src", "Index.js"));
-});
+
+// app.use(express.static(path.join( 'dist')));
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.resolve("dist","Index.js"))
+// })
 var _default = httpServer;
 exports["default"] = _default;
