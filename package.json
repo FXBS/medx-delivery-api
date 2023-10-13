@@ -6,7 +6,8 @@
   "main": "src/Index.js",
   "scripts": {
     "start": "node src/Index.js",
-    "dev": "nodemon src/Index.js --exec babel-node"
+    "dev": "nodemon src/Index.js --exec babel-node",
+    "build": "babel src -d dist"
   },
   "author": "Fxbs Developer",
   "license": "ISC",
