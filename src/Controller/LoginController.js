@@ -27,11 +27,11 @@ export const loginController = async ( req, res = response ) => {
             
         }
 
-        //const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
+        const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
         
-        const emailParameter = "_utf8mb4'" + email + "' COLLATE utf8mb4_general_ci";
+        // const emailParameter = "_utf8mb4'" + email + "' COLLATE utf8mb4_general_ci";
         
-        const userdb = await pool.query(`CALL SP_LOGIN(${emailParameter});`);
+        // const userdb = await pool.query(`CALL SP_LOGIN(${emailParameter});`);
 
 
     //   const userdb = await pool.query(`SELECT p.uid, p.firstName, p.lastName, p.image, u.email, u.passwordd, u.rol_id, u.notification_token FROM person p
