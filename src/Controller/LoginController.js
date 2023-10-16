@@ -27,11 +27,24 @@ export const loginController = async ( req, res = response ) => {
             
         }
 
-        const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
+        // const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
         
-        // const emailParameter = "_utf8mb4'" + email + "' COLLATE utf8mb4_general_ci";
+        const emailParameter = "_utf8mb4'" + email + "' COLLATE utf8mb4_general_ci";
+        const userdb = await pool.query(`CALL SP_LOGIN(${emailParameter});`);
         
-        // const userdb = await pool.query(`CALL SP_LOGIN(${emailParameter});`);
+            try {
+        const user = userdb[0][0];
+        console.log("User DB details:", userdb); 
+        console.log("User details:", user); 
+        console.log("User Password:", user['passwordd']);
+        // rest of the code
+        } catch (error) {
+        console.error("Error executing database query:", error);
+        return res.status(500).json({
+            resp: false,
+            msg: "Internal Server Error",
+        });
+        }
 
 
     //   const userdb = await pool.query(`SELECT p.uid, p.firstName, p.lastName, p.image, u.email, u.passwordd, u.rol_id, u.notification_token FROM person p
@@ -71,9 +84,9 @@ export const loginController = async ( req, res = response ) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 phone: user.phone,
-                selectedState: user.selected_state,
-                selectedDistrict: user.selected_district,
-                selectedPincodes: user.selected_pincodes,
+                selectedState: user.selectedState,
+                selectedDistrict: user.selectedDistrict,
+                selectedPincodes: user.selectedPincodes,
                 image: user.image,
                 email: user.email,
                 rol_id: user.rol_id,
@@ -113,9 +126,9 @@ export const renewTokenLogin = async ( req, res = response ) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 phone: user.phone,
-                selectedState: user.selected_state,
-                selectedDistrict: user.selected_district,
-                selectedPincodes: user.selected_pincodes,
+                selectedState: user.selectedState,
+                selectedDistrict: user.selectedDistrict,
+                selectedPincodes: user.selectedPincodes,
                 image: user.image,
                 phone: user.phone,
                 email: user.email,
