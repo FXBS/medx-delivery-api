@@ -14,8 +14,8 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var router = (0, _express.Router)();
 router.post('/register-client', _Multer.upLoadsProfile.single('image'), register.registerClient);
-router.post('/register-delivery', [_ValidateToken.verifyToken, _Multer.upLoadsProfile.single('image')], register.registerDelivery);
-router.post('/register-delivery-partner', [_ValidateToken.verifyToken, _Multer.upLoadsProfile.single('image')], register.registerDeliveryPartner);
+router.post('/register-delivery', [_Multer.upLoadsProfile.single('image')], register.registerDelivery);
+router.post('/register-delivery-partner', [_Multer.upLoadsProfile.single('image')], register.registerDeliveryPartner);
 router.get('/get-user-by-id', _ValidateToken.verifyToken, user.getUserById);
 router.put('/edit-profile', _ValidateToken.verifyToken, user.editProfile);
 router.get('/get-user-updated', _ValidateToken.verifyToken, user.getUserUpdated);

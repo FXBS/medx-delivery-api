@@ -144,30 +144,31 @@ var registerDeliveryPartner = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req) {
     var res,
       _req$body3,
+      partnerId,
       firstname,
       lastname,
-      phone,
-      email,
       selectedState,
       selectedDistrict,
-      selectedTaluk,
       selectedPincodes,
+      phone,
+      email,
       password,
-      notification_token,
       imagePath,
       validatedEmail,
       salt,
       pass,
+      queryResult,
+      rows,
       _args3 = arguments;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           res = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : _express.response;
           _context3.prev = 1;
-          _req$body3 = req.body, firstname = _req$body3.firstname, lastname = _req$body3.lastname, phone = _req$body3.phone, email = _req$body3.email, selectedState = _req$body3.selectedState, selectedDistrict = _req$body3.selectedDistrict, selectedTaluk = _req$body3.selectedTaluk, selectedPincodes = _req$body3.selectedPincodes, password = _req$body3.password, notification_token = _req$body3.notification_token;
+          _req$body3 = req.body, partnerId = _req$body3.partnerId, firstname = _req$body3.firstname, lastname = _req$body3.lastname, selectedState = _req$body3.selectedState, selectedDistrict = _req$body3.selectedDistrict, selectedPincodes = _req$body3.selectedPincodes, phone = _req$body3.phone, email = _req$body3.email, password = _req$body3.password;
           imagePath = req.file.filename;
-          console.log('Selected Pincodes:', selectedPincodes);
-          console.log('Selected state from database:', selectedState);
+          console.log('All Details:', partnerId, firstname, lastname, selectedState, selectedDistrict, selectedPincodes, phone, email, password, imagePath);
+          console.log('all details :', selectedState, selectedDistrict, selectedPincodes);
           _context3.next = 8;
           return _mysql["default"].query('SELECT email FROM users WHERE email = ?', [email]);
         case 8:
@@ -183,27 +184,38 @@ var registerDeliveryPartner = /*#__PURE__*/function () {
         case 11:
           salt = _bcrypt["default"].genSaltSync();
           pass = _bcrypt["default"].hashSync(password, salt);
-          _context3.next = 15;
-          return _mysql["default"].query("CALL SP_REGISTER_PARTNER(?,?,?,?,?,?,?,?,?,?,?,?);", [firstname, lastname, phone, imagePath, email, selectedState, selectedDistrict, selectedTaluk, selectedPincodes, pass, 3, notification_token]);
-        case 15:
+          console.log('password:', pass);
+          _context3.next = 16;
+          return _mysql["default"].query("CALL SP_REGISTER_PARTNER(?,?,?,?,?,?,?,?,?,?,?);", [partnerId, firstname, lastname, phone, selectedState, selectedDistrict, selectedPincodes, imagePath, email, pass, 4]);
+        case 16:
+          queryResult = _context3.sent;
+          console.log('Query Result:', queryResult);
+
+          // Check the structure of the queryResult and log individual rows if needed
+          if (queryResult && queryResult[0] && queryResult[0][0]) {
+            rows = queryResult[0][0];
+            console.log('Query Rows:', rows);
+          }
           res.json({
             resp: true,
-            msg: 'Devlivery successfully registered'
+            msg: 'Devlivery Partner successfully registered'
           });
-          _context3.next = 21;
+          _context3.next = 25;
           break;
-        case 18:
-          _context3.prev = 18;
+        case 22:
+          _context3.prev = 22;
           _context3.t0 = _context3["catch"](1);
           return _context3.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context3.t0
           }));
-        case 21:
+        case 25:
+          console.log('Query error :', _express.response.json);
+        case 26:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[1, 18]]);
+    }, _callee3, null, [[1, 22]]);
   }));
   return function registerDeliveryPartner(_x3) {
     return _ref3.apply(this, arguments);

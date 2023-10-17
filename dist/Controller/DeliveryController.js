@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAllDelivery = void 0;
+exports.getAllDeliveryPartner = exports.getAllDeliveryAgentsForPartner = exports.getAllDelivery = void 0;
 var _express = require("express");
 var _mysql = _interopRequireDefault(require("../Database/mysql.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -50,3 +50,93 @@ var getAllDelivery = /*#__PURE__*/function () {
   };
 }();
 exports.getAllDelivery = getAllDelivery;
+var getAllDeliveryAgentsForPartner = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req) {
+    var res,
+      partnerId,
+      deliverydb,
+      rows,
+      _args2 = arguments;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          res = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : _express.response;
+          _context2.prev = 1;
+          partnerId = req.query.partnerId;
+          console.log('PartnerId :', partnerId);
+          _context2.next = 6;
+          return _mysql["default"].query("CALL SP_ALL_DELIVERY_AGENTS_FOR_PARTNER(?);", [partnerId]);
+        case 6:
+          deliverydb = _context2.sent;
+          console.log('Query Result:', deliverydb);
+
+          // Check the structure of the queryResult and log individual rows if needed
+          if (deliverydb && deliverydb[0] && deliverydb[0][0]) {
+            rows = deliverydb[0][0];
+            console.log('Query Rows:', rows);
+          }
+          res.json({
+            resp: true,
+            msg: 'Get All Delivery Agents For a Partner',
+            delivery: deliverydb[0]
+          });
+          _context2.next = 16;
+          break;
+        case 12:
+          _context2.prev = 12;
+          _context2.t0 = _context2["catch"](1);
+          console.error('Error:', _context2.t0); // Log the error for debugging
+          return _context2.abrupt("return", res.status(500).json({
+            resp: false,
+            msg: _context2.t0
+          }));
+        case 16:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[1, 12]]);
+  }));
+  return function getAllDeliveryAgentsForPartner(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+exports.getAllDeliveryAgentsForPartner = getAllDeliveryAgentsForPartner;
+var getAllDeliveryPartner = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req) {
+    var res,
+      deliverydb,
+      _args3 = arguments;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          res = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : _express.response;
+          _context3.prev = 1;
+          _context3.next = 4;
+          return _mysql["default"].query("CALL SP_ALL_DELIVERY_PARTNER();");
+        case 4:
+          deliverydb = _context3.sent;
+          res.json({
+            resp: true,
+            msg: 'Get All Delivery Partner',
+            delivery: deliverydb[0]
+          });
+          _context3.next = 11;
+          break;
+        case 8:
+          _context3.prev = 8;
+          _context3.t0 = _context3["catch"](1);
+          return _context3.abrupt("return", res.status(500).json({
+            resp: false,
+            msg: _context3.t0
+          }));
+        case 11:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[1, 8]]);
+  }));
+  return function getAllDeliveryPartner(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+exports.getAllDeliveryPartner = getAllDeliveryPartner;

@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateStatusToOntheWay = exports.updateStatusToDispatched = exports.updateStatusToDelivered = exports.getOrdersByStatus = exports.getOrdersByDelivery = exports.getDetailsOrderById = exports.addNewOrders = void 0;
+exports.updateStatusToOntheWay = exports.updateStatusToDispatched = exports.updateStatusToDelivered = exports.updateStatusToAgent = exports.getOrdersByStatus = exports.getOrdersByDelivery = exports.getDetailsOrderById = exports.addNewOrders = void 0;
 var _express = require("express");
 var _mysql = _interopRequireDefault(require("../Database/mysql.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -19,6 +19,9 @@ var addNewOrders = /*#__PURE__*/function () {
       total,
       typePayment,
       products,
+      addressData,
+      latitude,
+      longitude,
       orderdb,
       _args = arguments;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -28,8 +31,31 @@ var addNewOrders = /*#__PURE__*/function () {
           _context.prev = 1;
           _req$body = req.body, uidAddress = _req$body.uidAddress, total = _req$body.total, typePayment = _req$body.typePayment, products = _req$body.products;
           _context.next = 5;
-          return _mysql["default"].query('INSERT INTO orders (client_id, address_id, amount, pay_type) VALUES (?,?,?,?)', [req.uid, uidAddress, total, typePayment]);
+          return _mysql["default"].query('SELECT Latitude, Longitude FROM addresses WHERE id = ?', [uidAddress]);
         case 5:
+          addressData = _context.sent;
+          if (!(addressData.length === 0)) {
+            _context.next = 8;
+            break;
+          }
+          return _context.abrupt("return", res.status(400).json({
+            resp: false,
+            msg: 'Invalid address ID'
+          }));
+        case 8:
+          latitude = addressData[0].Latitude;
+          longitude = addressData[0].Longitude; // Log data before inserting into the orders table
+          console.log('Data before inserting into orders table:', {
+            client_id: req.uid,
+            address_id: uidAddress,
+            latitude: latitude,
+            longitude: longitude,
+            amount: total,
+            pay_type: typePayment
+          });
+          _context.next = 13;
+          return _mysql["default"].query('INSERT INTO orders (client_id, address_id, latitude, longitude, amount, pay_type) VALUES (?,?,?,?,?,?)', [req.uid, uidAddress, latitude, longitude, total, typePayment]);
+        case 13:
           orderdb = _context.sent;
           products.forEach(function (o) {
             _mysql["default"].query('INSERT INTO orderDetails (order_id, product_id, quantity, price) VALUES (?,?,?,?)', [orderdb.insertId, o.uidProduct, o.quantity, o.quantity * o.price]);
@@ -38,20 +64,20 @@ var addNewOrders = /*#__PURE__*/function () {
             resp: true,
             msg: 'New Order added successfully'
           });
-          _context.next = 13;
+          _context.next = 21;
           break;
-        case 10:
-          _context.prev = 10;
+        case 18:
+          _context.prev = 18;
           _context.t0 = _context["catch"](1);
           return _context.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context.t0
           }));
-        case 13:
+        case 21:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[1, 10]]);
+    }, _callee, null, [[1, 18]]);
   }));
   return function addNewOrders(_x) {
     return _ref.apply(this, arguments);
@@ -62,6 +88,7 @@ var getOrdersByStatus = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req) {
     var res,
       ordersdb,
+      jsonResponse,
       _args2 = arguments;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -72,25 +99,34 @@ var getOrdersByStatus = /*#__PURE__*/function () {
           return _mysql["default"].query("CALL SP_ALL_ORDERS_STATUS(?);", [req.params.statusOrder]);
         case 4:
           ordersdb = _context2.sent;
-          res.json({
+          // res.json({
+          //     resp: true,
+          //     msg : 'Orders by ' + req.params.statusOrder,
+          //     ordersResponse : ordersdb[0]
+          // });
+          jsonResponse = {
             resp: true,
             msg: 'Orders by ' + req.params.statusOrder,
             ordersResponse: ordersdb[0]
-          });
-          _context2.next = 11;
+          };
+          console.log('JSON Response for order by status :', jsonResponse); // Log the JSON response
+
+          res.json(jsonResponse);
+          _context2.next = 14;
           break;
-        case 8:
-          _context2.prev = 8;
+        case 10:
+          _context2.prev = 10;
           _context2.t0 = _context2["catch"](1);
+          console.error('Error:', _context2.t0); // Log the error
           return _context2.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context2.t0
           }));
-        case 11:
+        case 14:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 8]]);
+    }, _callee2, null, [[1, 10]]);
   }));
   return function getOrdersByStatus(_x2) {
     return _ref2.apply(this, arguments);
@@ -150,7 +186,7 @@ var updateStatusToDispatched = /*#__PURE__*/function () {
           _context4.prev = 1;
           _req$body2 = req.body, idDelivery = _req$body2.idDelivery, idOrder = _req$body2.idOrder;
           _context4.next = 5;
-          return _mysql["default"].query('UPDATE orders SET status = ?, delivery_id = ? WHERE id = ?', ['DISPATCHED', idDelivery, idOrder]);
+          return _mysql["default"].query('UPDATE orders SET status = ?, delivery_id = ? WHERE id = ?', ['DISPATCHED TO PARTNER', idDelivery, idOrder]);
         case 5:
           res.json({
             resp: true,
@@ -176,24 +212,25 @@ var updateStatusToDispatched = /*#__PURE__*/function () {
   };
 }();
 exports.updateStatusToDispatched = updateStatusToDispatched;
-var getOrdersByDelivery = /*#__PURE__*/function () {
+var updateStatusToAgent = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req) {
     var res,
-      ordersDeliverydb,
+      _req$body3,
+      idDelivery,
+      idOrder,
       _args5 = arguments;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           res = _args5.length > 1 && _args5[1] !== undefined ? _args5[1] : _express.response;
           _context5.prev = 1;
-          _context5.next = 4;
-          return _mysql["default"].query("CALL SP_ORDERS_BY_DELIVERY(?,?);", [req.uid, req.params.statusOrder]);
-        case 4:
-          ordersDeliverydb = _context5.sent;
+          _req$body3 = req.body, idDelivery = _req$body3.idDelivery, idOrder = _req$body3.idOrder;
+          _context5.next = 5;
+          return _mysql["default"].query('UPDATE orders SET status = ?, delivery_id = ? WHERE id = ?', ['ASSIGNED TO AGENT', idDelivery, idOrder]);
+        case 5:
           res.json({
             resp: true,
-            msg: 'All Orders By Delivery',
-            ordersResponse: ordersDeliverydb[0]
+            msg: 'Order DISPATCHED TO AGENT'
           });
           _context5.next = 11;
           break;
@@ -210,30 +247,29 @@ var getOrdersByDelivery = /*#__PURE__*/function () {
       }
     }, _callee5, null, [[1, 8]]);
   }));
-  return function getOrdersByDelivery(_x5) {
+  return function updateStatusToAgent(_x5) {
     return _ref5.apply(this, arguments);
   };
 }();
-exports.getOrdersByDelivery = getOrdersByDelivery;
-var updateStatusToOntheWay = /*#__PURE__*/function () {
+exports.updateStatusToAgent = updateStatusToAgent;
+var getOrdersByDelivery = /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req) {
     var res,
-      _req$body3,
-      latitude,
-      longitude,
+      ordersDeliverydb,
       _args6 = arguments;
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
         case 0:
           res = _args6.length > 1 && _args6[1] !== undefined ? _args6[1] : _express.response;
           _context6.prev = 1;
-          _req$body3 = req.body, latitude = _req$body3.latitude, longitude = _req$body3.longitude;
-          _context6.next = 5;
-          return _mysql["default"].query('UPDATE orders SET status = ?, latitude = ?, longitude = ? WHERE id = ?', ['ON WAY', latitude, longitude, req.params.idOrder]);
-        case 5:
+          _context6.next = 4;
+          return _mysql["default"].query("CALL SP_ORDERS_BY_DELIVERY(?,?);", [req.uid, req.params.statusOrder]);
+        case 4:
+          ordersDeliverydb = _context6.sent;
           res.json({
             resp: true,
-            msg: 'ON WAY'
+            msg: 'All Orders By Delivery',
+            ordersResponse: ordersDeliverydb[0]
           });
           _context6.next = 11;
           break;
@@ -250,44 +286,84 @@ var updateStatusToOntheWay = /*#__PURE__*/function () {
       }
     }, _callee6, null, [[1, 8]]);
   }));
-  return function updateStatusToOntheWay(_x6) {
+  return function getOrdersByDelivery(_x6) {
     return _ref6.apply(this, arguments);
   };
 }();
-exports.updateStatusToOntheWay = updateStatusToOntheWay;
-var updateStatusToDelivered = /*#__PURE__*/function () {
+exports.getOrdersByDelivery = getOrdersByDelivery;
+var updateStatusToOntheWay = /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req) {
     var res,
+      _req$body4,
+      latitude,
+      longitude,
       _args7 = arguments;
     return _regeneratorRuntime().wrap(function _callee7$(_context7) {
       while (1) switch (_context7.prev = _context7.next) {
         case 0:
           res = _args7.length > 1 && _args7[1] !== undefined ? _args7[1] : _express.response;
           _context7.prev = 1;
-          _context7.next = 4;
+          _req$body4 = req.body, latitude = _req$body4.latitude, longitude = _req$body4.longitude;
+          _context7.next = 5;
+          return _mysql["default"].query('UPDATE orders SET status = ?, latitude = ?, longitude = ? WHERE id = ?', ['ON WAY', latitude, longitude, req.params.idOrder]);
+        case 5:
+          res.json({
+            resp: true,
+            msg: 'ON WAY'
+          });
+          _context7.next = 11;
+          break;
+        case 8:
+          _context7.prev = 8;
+          _context7.t0 = _context7["catch"](1);
+          return _context7.abrupt("return", res.status(500).json({
+            resp: false,
+            msg: _context7.t0
+          }));
+        case 11:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7, null, [[1, 8]]);
+  }));
+  return function updateStatusToOntheWay(_x7) {
+    return _ref7.apply(this, arguments);
+  };
+}();
+exports.updateStatusToOntheWay = updateStatusToOntheWay;
+var updateStatusToDelivered = /*#__PURE__*/function () {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(req) {
+    var res,
+      _args8 = arguments;
+    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+          res = _args8.length > 1 && _args8[1] !== undefined ? _args8[1] : _express.response;
+          _context8.prev = 1;
+          _context8.next = 4;
           return _mysql["default"].query('UPDATE orders SET status = ? WHERE id = ?', ['DELIVERED', req.params.idOrder]);
         case 4:
           res.json({
             resp: true,
             msg: 'ORDER DELIVERED'
           });
-          _context7.next = 10;
+          _context8.next = 10;
           break;
         case 7:
-          _context7.prev = 7;
-          _context7.t0 = _context7["catch"](1);
-          return _context7.abrupt("return", res.status(500).json({
+          _context8.prev = 7;
+          _context8.t0 = _context8["catch"](1);
+          return _context8.abrupt("return", res.status(500).json({
             resp: false,
-            msg: _context7.t0
+            msg: _context8.t0
           }));
         case 10:
         case "end":
-          return _context7.stop();
+          return _context8.stop();
       }
-    }, _callee7, null, [[1, 7]]);
+    }, _callee8, null, [[1, 7]]);
   }));
-  return function updateStatusToDelivered(_x7) {
-    return _ref7.apply(this, arguments);
+  return function updateStatusToDelivered(_x8) {
+    return _ref8.apply(this, arguments);
   };
 }();
 exports.updateStatusToDelivered = updateStatusToDelivered;
