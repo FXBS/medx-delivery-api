@@ -57,13 +57,28 @@ export const getOrdersByStatus = async (req, res = response ) => {
 
         const ordersdb = await pool.query(`CALL SP_ALL_ORDERS_STATUS(?);`, [ req.params.statusOrder ]);
 
-        res.json({
-            resp: true,
-            msg : 'Orders by ' + req.params.statusOrder,
-            ordersResponse : ordersdb[0]
-        });
+        // res.json({
+        //     resp: true,
+        //     msg : 'Orders by ' + req.params.statusOrder,
+        //     ordersResponse : ordersdb[0]
+        // });
+
+
+        const jsonResponse = {
+      resp: true,
+      msg: 'Orders by ' + req.params.statusOrder,
+      ordersResponse: ordersdb[0],
+    };
+
+    console.log('JSON Response for order by status :', jsonResponse); // Log the JSON response
+
+    res.json(jsonResponse);
         
     } catch (e) {
+
+         console.error('Error:', e); // Log the error
+
+
         return res.status(500).json({
             resp: false,
             msg : e
