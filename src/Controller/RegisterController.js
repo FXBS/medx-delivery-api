@@ -122,12 +122,13 @@ export const registerDeliveryPartner = async (req, res = response) => {
 
         
     } catch (e) {
+         console.error('Error calling stored procedure:', e);
         return res.status(500).json({
             resp: false,
             msg : e
         });
     }
-    console.log('Query error :', response.json);
+    console.log('Query error :', res);
 
 
 }

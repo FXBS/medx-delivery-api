@@ -200,18 +200,19 @@ var registerDeliveryPartner = /*#__PURE__*/function () {
             resp: true,
             msg: 'Devlivery Partner successfully registered'
           });
-          _context3.next = 25;
+          _context3.next = 26;
           break;
         case 22:
           _context3.prev = 22;
           _context3.t0 = _context3["catch"](1);
+          console.error('Error calling stored procedure:', _context3.t0);
           return _context3.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context3.t0
           }));
-        case 25:
-          console.log('Query error :', _express.response.json);
         case 26:
+          console.log('Query error :', res);
+        case 27:
         case "end":
           return _context3.stop();
       }
