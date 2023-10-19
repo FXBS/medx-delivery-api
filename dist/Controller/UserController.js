@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateNotificationToken = exports.updateDeliveryToClient = exports.getUserUpdated = exports.getUserById = exports.getAdminNotificationToken = exports.getAddressesUser = exports.getAddressOne = exports.editProfile = exports.deleteStreetAddress = exports.changePassword = exports.changeImageProfile = exports.addStreetAddress = void 0;
+exports.updateNotificationToken = exports.updateDeliveryToClient = exports.getUserUpdated = exports.getUserById = exports.getPartnerById = exports.getAdminNotificationToken = exports.getAddressesUser = exports.getAddressOne = exports.editProfile = exports.deleteStreetAddress = exports.changePassword = exports.changeImageProfile = exports.addStreetAddress = void 0;
 var _express = require("express");
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
 var _mysql = _interopRequireDefault(require("../Database/mysql.js"));
@@ -55,62 +55,103 @@ var getUserById = /*#__PURE__*/function () {
   };
 }();
 exports.getUserById = getUserById;
-var editProfile = /*#__PURE__*/function () {
+var getPartnerById = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req) {
     var res,
-      _req$body,
-      firstname,
-      lastname,
-      phone,
+      uid,
+      query,
       _args2 = arguments;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           res = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : _express.response;
           _context2.prev = 1;
-          _req$body = req.body, firstname = _req$body.firstname, lastname = _req$body.lastname, phone = _req$body.phone;
+          uid = req.uid;
           _context2.next = 5;
-          return _mysql["default"].query("CALL SP_UPDATE_PROFILE(?,?,?,?);", [req.uid, firstname, lastname, phone]);
+          return _mysql["default"].query("CALL SP_PARTNER_BY_ID(?);", [uid]);
         case 5:
+          query = _context2.sent;
           res.json({
             resp: true,
-            msg: 'Updated Profile'
+            msg: 'Get profile',
+            user: query[0][0]
           });
-          _context2.next = 11;
+          _context2.next = 12;
           break;
-        case 8:
-          _context2.prev = 8;
+        case 9:
+          _context2.prev = 9;
           _context2.t0 = _context2["catch"](1);
           return _context2.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context2.t0
           }));
-        case 11:
+        case 12:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 8]]);
+    }, _callee2, null, [[1, 9]]);
   }));
-  return function editProfile(_x2) {
+  return function getPartnerById(_x2) {
     return _ref2.apply(this, arguments);
   };
 }();
-exports.editProfile = editProfile;
-var getUserUpdated = /*#__PURE__*/function () {
+exports.getPartnerById = getPartnerById;
+var editProfile = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req) {
     var res,
-      userdb,
-      user,
+      _req$body,
+      firstname,
+      lastname,
+      phone,
       _args3 = arguments;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           res = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : _express.response;
           _context3.prev = 1;
-          _context3.next = 4;
+          _req$body = req.body, firstname = _req$body.firstname, lastname = _req$body.lastname, phone = _req$body.phone;
+          _context3.next = 5;
+          return _mysql["default"].query("CALL SP_UPDATE_PROFILE(?,?,?,?);", [req.uid, firstname, lastname, phone]);
+        case 5:
+          res.json({
+            resp: true,
+            msg: 'Updated Profile'
+          });
+          _context3.next = 11;
+          break;
+        case 8:
+          _context3.prev = 8;
+          _context3.t0 = _context3["catch"](1);
+          return _context3.abrupt("return", res.status(500).json({
+            resp: false,
+            msg: _context3.t0
+          }));
+        case 11:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[1, 8]]);
+  }));
+  return function editProfile(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+exports.editProfile = editProfile;
+var getUserUpdated = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req) {
+    var res,
+      userdb,
+      user,
+      _args4 = arguments;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          res = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : _express.response;
+          _context4.prev = 1;
+          _context4.next = 4;
           return _mysql["default"].query("CALL SP_USER_UPDATED(?);", [req.uid]);
         case 4:
-          userdb = _context3.sent;
+          userdb = _context4.sent;
           user = userdb[0][0];
           res.json({
             resp: true,
@@ -123,28 +164,28 @@ var getUserUpdated = /*#__PURE__*/function () {
               rol_id: user.rol_id
             }
           });
-          _context3.next = 12;
+          _context4.next = 12;
           break;
         case 9:
-          _context3.prev = 9;
-          _context3.t0 = _context3["catch"](1);
-          return _context3.abrupt("return", res.status(500).json({
+          _context4.prev = 9;
+          _context4.t0 = _context4["catch"](1);
+          return _context4.abrupt("return", res.status(500).json({
             resp: false,
-            msg: _context3.t0
+            msg: _context4.t0
           }));
         case 12:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
-    }, _callee3, null, [[1, 9]]);
+    }, _callee4, null, [[1, 9]]);
   }));
-  return function getUserUpdated(_x3) {
-    return _ref3.apply(this, arguments);
+  return function getUserUpdated(_x4) {
+    return _ref4.apply(this, arguments);
   };
 }();
 exports.getUserUpdated = getUserUpdated;
 var changePassword = /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req) {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req) {
     var res,
       _req$body2,
       currentPassword,
@@ -152,79 +193,79 @@ var changePassword = /*#__PURE__*/function () {
       passworddb,
       salt,
       pass,
-      _args4 = arguments;
-    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) switch (_context4.prev = _context4.next) {
-        case 0:
-          res = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : _express.response;
-          _context4.prev = 1;
-          _req$body2 = req.body, currentPassword = _req$body2.currentPassword, newPassword = _req$body2.newPassword;
-          _context4.next = 5;
-          return _mysql["default"].query('SELECT passwordd FROM users WHERE persona_id = ?', [req.uid]);
-        case 5:
-          passworddb = _context4.sent;
-          _context4.next = 8;
-          return _bcrypt["default"].compareSync(currentPassword, passworddb[0].passwordd);
-        case 8:
-          if (_context4.sent) {
-            _context4.next = 10;
-            break;
-          }
-          return _context4.abrupt("return", res.status(401).json({
-            resp: false,
-            msg: 'Passwords do not match'
-          }));
-        case 10:
-          salt = _bcrypt["default"].genSaltSync();
-          pass = _bcrypt["default"].hashSync(newPassword, salt);
-          _context4.next = 14;
-          return _mysql["default"].query('UPDATE users SET passwordd = ? WHERE persona_id = ?', [pass, req.uid]);
-        case 14:
-          res.json({
-            resp: true,
-            msg: 'Password Changed'
-          });
-          _context4.next = 20;
-          break;
-        case 17:
-          _context4.prev = 17;
-          _context4.t0 = _context4["catch"](1);
-          return _context4.abrupt("return", res.status(500).json({
-            resp: false,
-            msg: _context4.t0
-          }));
-        case 20:
-        case "end":
-          return _context4.stop();
-      }
-    }, _callee4, null, [[1, 17]]);
-  }));
-  return function changePassword(_x4) {
-    return _ref4.apply(this, arguments);
-  };
-}();
-exports.changePassword = changePassword;
-var changeImageProfile = /*#__PURE__*/function () {
-  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req) {
-    var res,
-      imagePath,
-      imagedb,
       _args5 = arguments;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           res = _args5.length > 1 && _args5[1] !== undefined ? _args5[1] : _express.response;
           _context5.prev = 1;
+          _req$body2 = req.body, currentPassword = _req$body2.currentPassword, newPassword = _req$body2.newPassword;
+          _context5.next = 5;
+          return _mysql["default"].query('SELECT passwordd FROM users WHERE persona_id = ?', [req.uid]);
+        case 5:
+          passworddb = _context5.sent;
+          _context5.next = 8;
+          return _bcrypt["default"].compareSync(currentPassword, passworddb[0].passwordd);
+        case 8:
+          if (_context5.sent) {
+            _context5.next = 10;
+            break;
+          }
+          return _context5.abrupt("return", res.status(401).json({
+            resp: false,
+            msg: 'Passwords do not match'
+          }));
+        case 10:
+          salt = _bcrypt["default"].genSaltSync();
+          pass = _bcrypt["default"].hashSync(newPassword, salt);
+          _context5.next = 14;
+          return _mysql["default"].query('UPDATE users SET passwordd = ? WHERE persona_id = ?', [pass, req.uid]);
+        case 14:
+          res.json({
+            resp: true,
+            msg: 'Password Changed'
+          });
+          _context5.next = 20;
+          break;
+        case 17:
+          _context5.prev = 17;
+          _context5.t0 = _context5["catch"](1);
+          return _context5.abrupt("return", res.status(500).json({
+            resp: false,
+            msg: _context5.t0
+          }));
+        case 20:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5, null, [[1, 17]]);
+  }));
+  return function changePassword(_x5) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+exports.changePassword = changePassword;
+var changeImageProfile = /*#__PURE__*/function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req) {
+    var res,
+      imagePath,
+      imagedb,
+      _args6 = arguments;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          res = _args6.length > 1 && _args6[1] !== undefined ? _args6[1] : _express.response;
+          _context6.prev = 1;
           imagePath = req.file.filename;
           console.log('req.file:', req.file);
           console.log('imagePath:', imagePath);
           console.log('Request Id:', req.uid);
           imagedb = _mysql["default"].query('SELECT image FROM person WHERE uid = ?', [req.uid]);
           if (!(imagedb.length > 0)) {
-            _context5.next = 10;
+            _context6.next = 10;
             break;
           }
-          _context5.next = 10;
+          _context6.next = 10;
           return _fsExtra["default"].unlink(_path["default"].resolve('src/Uploads/Profile/' + imagedb[0].image));
         case 10:
           _mysql["default"].query('UPDATE person SET image = ? WHERE uid = ?', [imagePath, req.uid]);
@@ -232,62 +273,62 @@ var changeImageProfile = /*#__PURE__*/function () {
             resp: true,
             msg: 'Picture changed'
           });
-          _context5.next = 17;
+          _context6.next = 17;
           break;
         case 14:
-          _context5.prev = 14;
-          _context5.t0 = _context5["catch"](1);
-          return _context5.abrupt("return", res.status(500).json({
-            resp: false,
-            msg: _context5.t0
-          }));
-        case 17:
-        case "end":
-          return _context5.stop();
-      }
-    }, _callee5, null, [[1, 14]]);
-  }));
-  return function changeImageProfile(_x5) {
-    return _ref5.apply(this, arguments);
-  };
-}();
-exports.changeImageProfile = changeImageProfile;
-var getAddressesUser = /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req) {
-    var res,
-      addressesdb,
-      _args6 = arguments;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) switch (_context6.prev = _context6.next) {
-        case 0:
-          res = _args6.length > 1 && _args6[1] !== undefined ? _args6[1] : _express.response;
-          _context6.prev = 1;
-          _context6.next = 4;
-          return _mysql["default"].query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
-        case 4:
-          addressesdb = _context6.sent;
-          res.json({
-            resp: true,
-            msg: 'List the Addresses',
-            listAddresses: addressesdb
-          });
-          _context6.next = 11;
-          break;
-        case 8:
-          _context6.prev = 8;
+          _context6.prev = 14;
           _context6.t0 = _context6["catch"](1);
           return _context6.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context6.t0
           }));
-        case 11:
+        case 17:
         case "end":
           return _context6.stop();
       }
-    }, _callee6, null, [[1, 8]]);
+    }, _callee6, null, [[1, 14]]);
   }));
-  return function getAddressesUser(_x6) {
+  return function changeImageProfile(_x6) {
     return _ref6.apply(this, arguments);
+  };
+}();
+exports.changeImageProfile = changeImageProfile;
+var getAddressesUser = /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req) {
+    var res,
+      addressesdb,
+      _args7 = arguments;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          res = _args7.length > 1 && _args7[1] !== undefined ? _args7[1] : _express.response;
+          _context7.prev = 1;
+          _context7.next = 4;
+          return _mysql["default"].query('SELECT id, street, reference, Latitude, Longitude FROM addresses WHERE persona_id = ?', [req.uid]);
+        case 4:
+          addressesdb = _context7.sent;
+          res.json({
+            resp: true,
+            msg: 'List the Addresses',
+            listAddresses: addressesdb
+          });
+          _context7.next = 11;
+          break;
+        case 8:
+          _context7.prev = 8;
+          _context7.t0 = _context7["catch"](1);
+          return _context7.abrupt("return", res.status(500).json({
+            resp: false,
+            msg: _context7.t0
+          }));
+        case 11:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7, null, [[1, 8]]);
+  }));
+  return function getAddressesUser(_x7) {
+    return _ref7.apply(this, arguments);
   };
 }();
 
@@ -333,200 +374,162 @@ var getAddressesUser = /*#__PURE__*/function () {
 //   };
 exports.getAddressesUser = getAddressesUser;
 var deleteStreetAddress = /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req) {
-    var res,
-      _args7 = arguments;
-    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-      while (1) switch (_context7.prev = _context7.next) {
-        case 0:
-          res = _args7.length > 1 && _args7[1] !== undefined ? _args7[1] : _express.response;
-          _context7.prev = 1;
-          _context7.next = 4;
-          return _mysql["default"].query('DELETE FROM addresses WHERE id = ? AND persona_id = ?', [req.params.idAddress, req.uid]);
-        case 4:
-          res.json({
-            resp: true,
-            msg: 'Street Address deleted'
-          });
-          _context7.next = 10;
-          break;
-        case 7:
-          _context7.prev = 7;
-          _context7.t0 = _context7["catch"](1);
-          return _context7.abrupt("return", res.status(500).json({
-            resp: false,
-            msg: _context7.t0
-          }));
-        case 10:
-        case "end":
-          return _context7.stop();
-      }
-    }, _callee7, null, [[1, 7]]);
-  }));
-  return function deleteStreetAddress(_x7) {
-    return _ref7.apply(this, arguments);
-  };
-}();
-exports.deleteStreetAddress = deleteStreetAddress;
-var addStreetAddress = /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(req) {
     var res,
-      _req$body3,
-      street,
-      reference,
-      latitude,
-      longitude,
       _args8 = arguments;
     return _regeneratorRuntime().wrap(function _callee8$(_context8) {
       while (1) switch (_context8.prev = _context8.next) {
         case 0:
           res = _args8.length > 1 && _args8[1] !== undefined ? _args8[1] : _express.response;
           _context8.prev = 1;
-          _req$body3 = req.body, street = _req$body3.street, reference = _req$body3.reference, latitude = _req$body3.latitude, longitude = _req$body3.longitude;
-          _context8.next = 5;
-          return _mysql["default"].query('INSERT INTO addresses (street, reference, Latitude, Longitude, persona_id) VALUE (?,?,?,?,?)', [street, reference, latitude, longitude, req.uid]);
-        case 5:
+          _context8.next = 4;
+          return _mysql["default"].query('DELETE FROM addresses WHERE id = ? AND persona_id = ?', [req.params.idAddress, req.uid]);
+        case 4:
           res.json({
             resp: true,
-            msg: 'Street Address added successfully'
+            msg: 'Street Address deleted'
           });
-          _context8.next = 11;
+          _context8.next = 10;
           break;
-        case 8:
-          _context8.prev = 8;
+        case 7:
+          _context8.prev = 7;
           _context8.t0 = _context8["catch"](1);
           return _context8.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context8.t0
           }));
-        case 11:
+        case 10:
         case "end":
           return _context8.stop();
       }
-    }, _callee8, null, [[1, 8]]);
+    }, _callee8, null, [[1, 7]]);
   }));
-  return function addStreetAddress(_x8) {
+  return function deleteStreetAddress(_x8) {
     return _ref8.apply(this, arguments);
   };
 }();
-exports.addStreetAddress = addStreetAddress;
-var getAddressOne = /*#__PURE__*/function () {
+exports.deleteStreetAddress = deleteStreetAddress;
+var addStreetAddress = /*#__PURE__*/function () {
   var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(req) {
     var res,
-      addressdb,
+      _req$body3,
+      street,
+      reference,
+      latitude,
+      longitude,
       _args9 = arguments;
     return _regeneratorRuntime().wrap(function _callee9$(_context9) {
       while (1) switch (_context9.prev = _context9.next) {
         case 0:
           res = _args9.length > 1 && _args9[1] !== undefined ? _args9[1] : _express.response;
           _context9.prev = 1;
-          addressdb = _mysql["default"].query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [req.uid]);
+          _req$body3 = req.body, street = _req$body3.street, reference = _req$body3.reference, latitude = _req$body3.latitude, longitude = _req$body3.longitude;
+          _context9.next = 5;
+          return _mysql["default"].query('INSERT INTO addresses (street, reference, Latitude, Longitude, persona_id) VALUE (?,?,?,?,?)', [street, reference, latitude, longitude, req.uid]);
+        case 5:
           res.json({
             resp: true,
-            msg: 'One Address',
-            address: addressdb[0]
+            msg: 'Street Address added successfully'
           });
-          _context9.next = 9;
+          _context9.next = 11;
           break;
-        case 6:
-          _context9.prev = 6;
+        case 8:
+          _context9.prev = 8;
           _context9.t0 = _context9["catch"](1);
           return _context9.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context9.t0
           }));
-        case 9:
+        case 11:
         case "end":
           return _context9.stop();
       }
-    }, _callee9, null, [[1, 6]]);
+    }, _callee9, null, [[1, 8]]);
   }));
-  return function getAddressOne(_x9) {
+  return function addStreetAddress(_x9) {
     return _ref9.apply(this, arguments);
   };
 }();
-exports.getAddressOne = getAddressOne;
-var updateNotificationToken = /*#__PURE__*/function () {
+exports.addStreetAddress = addStreetAddress;
+var getAddressOne = /*#__PURE__*/function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(req) {
     var res,
-      nToken,
+      addressdb,
       _args10 = arguments;
     return _regeneratorRuntime().wrap(function _callee10$(_context10) {
       while (1) switch (_context10.prev = _context10.next) {
         case 0:
           res = _args10.length > 1 && _args10[1] !== undefined ? _args10[1] : _express.response;
           _context10.prev = 1;
-          nToken = req.body.nToken;
-          _context10.next = 5;
-          return _mysql["default"].query('UPDATE users SET notification_token = ? WHERE persona_id = ?', [nToken, req.uid]);
-        case 5:
+          addressdb = _mysql["default"].query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [req.uid]);
           res.json({
             resp: true,
-            msg: 'Token updated'
+            msg: 'One Address',
+            address: addressdb[0]
           });
-          _context10.next = 11;
+          _context10.next = 9;
           break;
-        case 8:
-          _context10.prev = 8;
+        case 6:
+          _context10.prev = 6;
           _context10.t0 = _context10["catch"](1);
           return _context10.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context10.t0
           }));
-        case 11:
+        case 9:
         case "end":
           return _context10.stop();
       }
-    }, _callee10, null, [[1, 8]]);
+    }, _callee10, null, [[1, 6]]);
   }));
-  return function updateNotificationToken(_x10) {
+  return function getAddressOne(_x10) {
     return _ref10.apply(this, arguments);
   };
 }();
-exports.updateNotificationToken = updateNotificationToken;
-var getAdminNotificationToken = /*#__PURE__*/function () {
+exports.getAddressOne = getAddressOne;
+var updateNotificationToken = /*#__PURE__*/function () {
   var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(req) {
     var res,
-      admisdb,
-      tokens,
+      nToken,
       _args11 = arguments;
     return _regeneratorRuntime().wrap(function _callee11$(_context11) {
       while (1) switch (_context11.prev = _context11.next) {
         case 0:
           res = _args11.length > 1 && _args11[1] !== undefined ? _args11[1] : _express.response;
           _context11.prev = 1;
-          _context11.next = 4;
-          return _mysql["default"].query('SELECT notification_token FROM users WHERE rol_id = 1');
-        case 4:
-          admisdb = _context11.sent;
-          tokens = [];
-          admisdb.forEach(function (t) {
-            tokens.push(t.notification_token);
+          nToken = req.body.nToken;
+          _context11.next = 5;
+          return _mysql["default"].query('UPDATE users SET notification_token = ? WHERE persona_id = ?', [nToken, req.uid]);
+        case 5:
+          res.json({
+            resp: true,
+            msg: 'Token updated'
           });
-          res.json(tokens);
-          _context11.next = 13;
+          _context11.next = 11;
           break;
-        case 10:
-          _context11.prev = 10;
+        case 8:
+          _context11.prev = 8;
           _context11.t0 = _context11["catch"](1);
-          return _context11.abrupt("return", res.status(501).json({
+          return _context11.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context11.t0
           }));
-        case 13:
+        case 11:
         case "end":
           return _context11.stop();
       }
-    }, _callee11, null, [[1, 10]]);
+    }, _callee11, null, [[1, 8]]);
   }));
-  return function getAdminNotificationToken(_x11) {
+  return function updateNotificationToken(_x11) {
     return _ref11.apply(this, arguments);
   };
 }();
-exports.getAdminNotificationToken = getAdminNotificationToken;
-var updateDeliveryToClient = /*#__PURE__*/function () {
+exports.updateNotificationToken = updateNotificationToken;
+var getAdminNotificationToken = /*#__PURE__*/function () {
   var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(req) {
     var res,
+      admisdb,
+      tokens,
       _args12 = arguments;
     return _regeneratorRuntime().wrap(function _callee12$(_context12) {
       while (1) switch (_context12.prev = _context12.next) {
@@ -534,29 +537,67 @@ var updateDeliveryToClient = /*#__PURE__*/function () {
           res = _args12.length > 1 && _args12[1] !== undefined ? _args12[1] : _express.response;
           _context12.prev = 1;
           _context12.next = 4;
+          return _mysql["default"].query('SELECT notification_token FROM users WHERE rol_id = 1');
+        case 4:
+          admisdb = _context12.sent;
+          tokens = [];
+          admisdb.forEach(function (t) {
+            tokens.push(t.notification_token);
+          });
+          res.json(tokens);
+          _context12.next = 13;
+          break;
+        case 10:
+          _context12.prev = 10;
+          _context12.t0 = _context12["catch"](1);
+          return _context12.abrupt("return", res.status(501).json({
+            resp: false,
+            msg: _context12.t0
+          }));
+        case 13:
+        case "end":
+          return _context12.stop();
+      }
+    }, _callee12, null, [[1, 10]]);
+  }));
+  return function getAdminNotificationToken(_x12) {
+    return _ref12.apply(this, arguments);
+  };
+}();
+exports.getAdminNotificationToken = getAdminNotificationToken;
+var updateDeliveryToClient = /*#__PURE__*/function () {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(req) {
+    var res,
+      _args13 = arguments;
+    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+      while (1) switch (_context13.prev = _context13.next) {
+        case 0:
+          res = _args13.length > 1 && _args13[1] !== undefined ? _args13[1] : _express.response;
+          _context13.prev = 1;
+          _context13.next = 4;
           return _mysql["default"].query('UPDATE users SET rol_id = ? WHERE persona_id = ?', [2, req.params.idPerson]);
         case 4:
           res.json({
             resp: true,
             msg: 'Delivery To Client'
           });
-          _context12.next = 10;
+          _context13.next = 10;
           break;
         case 7:
-          _context12.prev = 7;
-          _context12.t0 = _context12["catch"](1);
-          return _context12.abrupt("return", res.status(501).json({
+          _context13.prev = 7;
+          _context13.t0 = _context13["catch"](1);
+          return _context13.abrupt("return", res.status(501).json({
             resp: false,
-            msg: _context12.t0
+            msg: _context13.t0
           }));
         case 10:
         case "end":
-          return _context12.stop();
+          return _context13.stop();
       }
-    }, _callee12, null, [[1, 7]]);
+    }, _callee13, null, [[1, 7]]);
   }));
-  return function updateDeliveryToClient(_x12) {
-    return _ref12.apply(this, arguments);
+  return function updateDeliveryToClient(_x13) {
+    return _ref13.apply(this, arguments);
   };
 }();
 exports.updateDeliveryToClient = updateDeliveryToClient;

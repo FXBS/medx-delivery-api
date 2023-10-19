@@ -28,6 +28,29 @@ export const getUserById = async (req, res = response) => {
 }
 
 
+export const getPartnerById = async (req, res = response) => {
+
+    try {
+
+        const uid = req.uid;
+
+        const query = await pool.query(`CALL SP_PARTNER_BY_ID(?);`, [uid]);
+        
+        res.json({
+            resp: true,
+            msg : 'Get profile',
+            user: query[0][0]
+        });
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
+
 
 
 
