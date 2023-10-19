@@ -85,55 +85,67 @@ var registerDelivery = /*#__PURE__*/function () {
       phone,
       email,
       password,
+      partnerId,
       notification_token,
       imagePath,
       validatedEmail,
       salt,
       pass,
+      queryResult,
+      rows,
       _args2 = arguments;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           res = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : _express.response;
           _context2.prev = 1;
-          _req$body2 = req.body, firstname = _req$body2.firstname, lastname = _req$body2.lastname, phone = _req$body2.phone, email = _req$body2.email, password = _req$body2.password, notification_token = _req$body2.notification_token;
+          _req$body2 = req.body, firstname = _req$body2.firstname, lastname = _req$body2.lastname, phone = _req$body2.phone, email = _req$body2.email, password = _req$body2.password, partnerId = _req$body2.partnerId, notification_token = _req$body2.notification_token;
           imagePath = req.file.filename;
-          _context2.next = 6;
+          console.log('All Details:', firstname, lastname, phone, imagePath, email, password, partnerId, notification_token);
+          _context2.next = 7;
           return _mysql["default"].query('SELECT email FROM users WHERE email = ?', [email]);
-        case 6:
+        case 7:
           validatedEmail = _context2.sent;
           if (!(validatedEmail.length > 0)) {
-            _context2.next = 9;
+            _context2.next = 10;
             break;
           }
           return _context2.abrupt("return", res.status(401).json({
             resp: false,
             msg: 'Email already exists'
           }));
-        case 9:
+        case 10:
           salt = _bcrypt["default"].genSaltSync();
           pass = _bcrypt["default"].hashSync(password, salt);
-          _context2.next = 13;
-          return _mysql["default"].query("CALL SP_REGISTER(?,?,?,?,?,?,?,?);", [firstname, lastname, phone, imagePath, email, pass, 3, notification_token]);
-        case 13:
+          _context2.next = 14;
+          return _mysql["default"].query("CALL SP_REGISTER(?,?,?,?,?,?,?,?,?);", [partnerId, firstname, lastname, phone, imagePath, email, pass, 3, notification_token]);
+        case 14:
+          queryResult = _context2.sent;
+          console.log('Query Result:', queryResult);
+
+          // Check the structure of the queryResult and log individual rows if needed
+          if (queryResult && queryResult[0] && queryResult[0][0]) {
+            rows = queryResult[0][0];
+            console.log('Query Rows:', rows);
+          }
           res.json({
             resp: true,
             msg: 'Devlivery successfully registered'
           });
-          _context2.next = 19;
+          _context2.next = 23;
           break;
-        case 16:
-          _context2.prev = 16;
+        case 20:
+          _context2.prev = 20;
           _context2.t0 = _context2["catch"](1);
           return _context2.abrupt("return", res.status(500).json({
             resp: false,
             msg: _context2.t0
           }));
-        case 19:
+        case 23:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 16]]);
+    }, _callee2, null, [[1, 20]]);
   }));
   return function registerDelivery(_x2) {
     return _ref2.apply(this, arguments);
