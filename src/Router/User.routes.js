@@ -12,6 +12,7 @@ router.post('/register-delivery',  [upLoadsProfile.single('image')] , register.r
 router.post('/register-delivery-partner',   [upLoadsProfile.single('image') ], register.registerDeliveryPartner );
 
 router.get('/get-user-by-id', verifyToken, user.getUserById);
+router.get('/get-partner-by-id',  user.getUserById);
 router.put('/edit-profile', verifyToken, user.editProfile);
 router.get('/get-user-updated', verifyToken, user.getUserUpdated);
 router.put('/change-password', verifyToken, user.changePassword);

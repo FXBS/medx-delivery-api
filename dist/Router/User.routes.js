@@ -17,6 +17,7 @@ router.post('/register-client', _Multer.upLoadsProfile.single('image'), register
 router.post('/register-delivery', [_Multer.upLoadsProfile.single('image')], register.registerDelivery);
 router.post('/register-delivery-partner', [_Multer.upLoadsProfile.single('image')], register.registerDeliveryPartner);
 router.get('/get-user-by-id', _ValidateToken.verifyToken, user.getUserById);
+router.get('/get-partner-by-id', user.getUserById);
 router.put('/edit-profile', _ValidateToken.verifyToken, user.editProfile);
 router.get('/get-user-updated', _ValidateToken.verifyToken, user.getUserUpdated);
 router.put('/change-password', _ValidateToken.verifyToken, user.changePassword);
