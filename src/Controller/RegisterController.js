@@ -45,8 +45,10 @@ export const registerDelivery = async (req, res = response) => {
 
     try {
 
-        const { firstname, lastname, phone, email, password, notification_token } = req.body;
+        const { firstname, lastname, phone, email, password,partnerId, notification_token } = req.body;
         const imagePath = req.file.filename;
+
+         console.log('All Details:', firstname, lastname, phone, imagePath,email, password,partnerId, notification_token );
 
         const validatedEmail = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
 
@@ -60,7 +62,17 @@ export const registerDelivery = async (req, res = response) => {
         let salt = bcrypt.genSaltSync();
         const pass = bcrypt.hashSync( password, salt );
 
-        await pool.query(`CALL SP_REGISTER(?,?,?,?,?,?,?,?);`, [firstname, lastname, phone, imagePath, email, pass, 3, notification_token]);
+         const queryResult = await pool.query(`CALL SP_REGISTER(?,?,?,?,?,?,?,?,?);`, [partnerId,
+            firstname, lastname, phone, imagePath, email, pass,  3, notification_token]);
+
+
+              console.log('Query Result:', queryResult);
+
+        // Check the structure of the queryResult and log individual rows if needed
+        if (queryResult && queryResult[0] && queryResult[0][0]) {
+        const rows = queryResult[0][0];
+        console.log('Query Rows:', rows);
+        }
 
         res.json({
             resp: true,
@@ -77,7 +89,6 @@ export const registerDelivery = async (req, res = response) => {
 
 
 }
-
 export const registerDeliveryPartner = async (req, res = response) => {
 
     try {
