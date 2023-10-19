@@ -9,6 +9,7 @@ var _express = require("express");
 var _ValidateToken = require("../Middleware/ValidateToken.js");
 var register = _interopRequireWildcard(require("../Controller/RegisterController.js"));
 var user = _interopRequireWildcard(require("../Controller/UserController.js"));
+var partner = _interopRequireWildcard(require("../Controller/PartnerController.js"));
 var _Multer = require("../Lib/Multer.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -17,7 +18,7 @@ router.post('/register-client', _Multer.upLoadsProfile.single('image'), register
 router.post('/register-delivery', [_Multer.upLoadsProfile.single('image')], register.registerDelivery);
 router.post('/register-delivery-partner', [_Multer.upLoadsProfile.single('image')], register.registerDeliveryPartner);
 router.get('/get-user-by-id', _ValidateToken.verifyToken, user.getUserById);
-router.get('/get-partner-by-id', user.getUserById);
+router.get('/get-partner-by-id', partner.PartnerController);
 router.put('/edit-profile', _ValidateToken.verifyToken, user.editProfile);
 router.get('/get-user-updated', _ValidateToken.verifyToken, user.getUserUpdated);
 router.put('/change-password', _ValidateToken.verifyToken, user.changePassword);
