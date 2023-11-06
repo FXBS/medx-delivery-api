@@ -30,7 +30,7 @@ export const addNewOrders = async (req, res = response ) => {
             pay_type: typePayment
         });
 
-        const orderdb = await pool.query('INSERT INTO orders (client_id, address_id, latitude, longitude, amount, pay_type) VALUES (?,?,?,?,?,?)', [ req.uid, uidAddress,latitude, longitude, total, typePayment ]);
+        const orderdb = await pool.query('INSERT INTO orders (client_id, address_id, latitude, longitude,status, amount, pay_type) VALUES (?,?,?,?,?,?,?)', [ req.uid, uidAddress,latitude, longitude,'PAID OUT', total, typePayment ]);
 
         products.forEach(o => {
              pool.query('INSERT INTO orderDetails (order_id, product_id, quantity, price) VALUES (?,?,?,?)', [ orderdb.insertId, o.uidProduct, o.quantity, o.quantity * o.price ]);
