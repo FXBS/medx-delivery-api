@@ -54,7 +54,7 @@ var addNewOrders = /*#__PURE__*/function () {
             pay_type: typePayment
           });
           _context.next = 13;
-          return _mysql["default"].query('INSERT INTO orders (client_id, address_id, latitude, longitude, amount, pay_type) VALUES (?,?,?,?,?,?)', [req.uid, uidAddress, latitude, longitude, total, typePayment]);
+          return _mysql["default"].query('INSERT INTO orders (client_id, address_id, latitude, longitude,status, amount, pay_type) VALUES (?,?,?,?,?,?,?)', [req.uid, uidAddress, latitude, longitude, 'PAID OUT', total, typePayment]);
         case 13:
           orderdb = _context.sent;
           products.forEach(function (o) {
